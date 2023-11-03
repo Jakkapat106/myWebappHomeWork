@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <div id="app" style="margin-top: 15px;">
+        <div class="container">
+            <div class="form-group mx-sm-4 mb-2">
+                <label class="form-label">จังหวัดที่ต้องการค้นหาอำเภอ</label>
+                <input type="text" class="form-control" id="province" placeholder="จังหวัด" v-model="province_input" />
+                <button class="btn btn-primary mb-2" style="margin-top: 15px;" @click="clickProvince()">ค้นหาอำเภอ</button>    
+                <ul>
+                    <p style="font-size: 18px; font-weight: 700; margin-top: 10px">รายชื่ออำเภอ</p>     
+                    <li v-for="dist in district_ltt">{{dist}}</li>
+                </ul>    
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    const { createApp, ref } = Vue;
+    createApp({
+      data() {
+        return {
+          province_input: "",
+          district_ltt:[],
+          provinc: ([]),
+        };
+      },
+      methods: {
+        clickProvince() {
+            var district = this.province[this.province_input];
+            this.district_ltt = Object.keys(district);
+        },
+      },
+      mounted() {
+        axios({
+          method: "get",
+          url: "https://numvarn.github.io/adv-web-pro/data/thaiprovince.json",
+        })
+        .then((respone) => {this.province = respone.data;})
+        .then((province) => {this.provinc =Object.keys(this.province)});
+      },
+    }).mount("#app");
+  </script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</html>
